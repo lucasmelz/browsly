@@ -1,0 +1,63 @@
+Arguments: 
+  /Users/mindera/Library/Application Support/fnm/node-versions/v18.18.2/installation/bin/node /usr/local/bin/yarn add -D @types/node
+
+PATH: 
+  /Users/mindera/Library/Caches/fnm_multishells/98994_1749765532833/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/anaconda3/condabin:/Users/mindera/Library/Caches/fnm_multishells/67219_1749291987858/bin:/Users/mindera/Library/Python/3.11/bin:/Users/mindera/.yarn/bin:/Users/mindera/Library/Python/3.11/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  18.18.2
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/typescript/-/typescript-5.8.3.tgz: ESOCKETTIMEDOUT
+      at ClientRequest.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141517:19)
+      at Object.onceWrapper (node:events:631:28)
+      at ClientRequest.emit (node:events:517:28)
+      at TLSSocket.emitRequestTimeout (node:_http_client:847:9)
+      at Object.onceWrapper (node:events:631:28)
+      at TLSSocket.emit (node:events:529:35)
+      at Socket._onTimeout (node:net:598:8)
+      at listOnTimeout (node:internal/timers:569:17)
+      at process.processTimers (node:internal/timers:512:7)
+
+npm manifest: 
+  {
+    "name": "browlsy",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+      "dev": "vite",
+      "build": "tsc -b && vite build",
+      "lint": "eslint .",
+      "preview": "vite preview"
+    },
+    "dependencies": {
+      "react": "^19.1.0",
+      "react-dom": "^19.1.0"
+    },
+    "devDependencies": {
+      "@eslint/js": "^9.25.0",
+      "@types/react": "^19.1.2",
+      "@types/react-dom": "^19.1.2",
+      "@vitejs/plugin-react-swc": "^3.9.0",
+      "eslint": "^9.25.0",
+      "eslint-plugin-react-hooks": "^5.2.0",
+      "eslint-plugin-react-refresh": "^0.4.19",
+      "globals": "^16.0.0",
+      "typescript": "~5.8.3",
+      "typescript-eslint": "^8.30.1",
+      "vite": "^6.3.5"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
