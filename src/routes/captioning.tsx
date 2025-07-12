@@ -181,8 +181,7 @@ function RouteComponent() {
               Audio/Video Captioning & Translation
             </h1>
             <h2 className="text-xl font-semibold">
-              In-browser speech recognition & translation w/ word-level
-              timestamps
+              Generate and download subtitles for video or audio
             </h2>
           </div>
 
@@ -216,22 +215,7 @@ function RouteComponent() {
                 </a>
                 , a 73 million parameter speech recognition model with the
                 ability to generate word-level timestamps and translate across
-                100 different languages. Once loaded, the model ({modelSize}
-                &nbsp;MB) will be cached and reused when you revisit the page.
-                <br />
-                <br />
-                Everything runs locally in your browser using{" "}
-                <a
-                  href="https://huggingface.co/docs/transformers.js"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="underline"
-                >
-                  🤗&nbsp;Transformers.js
-                </a>{" "}
-                and ONNX Runtime Web, meaning no API calls are made to a server
-                for inference. You can even disconnect from the internet after
-                the model has loaded!
+                100 different languages.
               </p>
             )}
 

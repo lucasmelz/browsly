@@ -26,7 +26,7 @@ const items = [
     icon: Home,
   },
   {
-    title: "Translation",
+    title: "Live Voice Translation",
     url: "/live-translation",
     icon: SquareChartGanttIcon,
   },

@@ -357,7 +357,7 @@ function RouteComponent() {
         <button
           onClick={handleToggleListen}
           disabled={isLoading}
-          className={`w-64 text-white font-bold py-3 px-4 rounded-full transition-all duration-300 flex items-center justify-center
+          className={`w-52 text-white font-bold py-2 px-3 rounded-full transition-all duration-300 flex items-center justify-center
             ${isListening ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"}
             ${isLoading ? "bg-gray-400 cursor-not-allowed" : ""}
           `}
@@ -412,10 +412,10 @@ function LanguageDropdown({ label, selectedLanguage, onSelect }: { label: string
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button
-            className="w-48 border-r-8 border-transparent outline-1 outline-gray-300  hover:not-disabled:outline-[#FF7F50] hover:not-disabled:[&_svg]:stroke-[#FF7F50] focus:not-disabled:outline-[#FF7F50] focus:not-disabled:[&_svg]:stroke-[#FF7F50] data-[state=open]:outline-[#FF7F50] hover:outline-[#FF7F50] focus:outline-[#FF7F50]  data-[state=open]:[&_svg]:rotate-180 data-[state=open]:[&_svg]:stroke-[#FF7F50] [&_svg]:transition-all [&_svg]:duration-300 rounded p-2 flex justify-between items-center transition-all duration-300"
+            className="w-48 border-r-8 border-transparent outline-1 outline-gray-300  hover:not-disabled:outline-[#FF7F50] hover:not-disabled:[&_svg]:stroke-[#FF7F50] focus:not-disabled:outline-[#FF7F50] focus:not-disabled:[&_svg]:stroke-[#FF7F50] data-[state=open]:outline-[#FF7F50] hover:outline-[#FF7F50] focus:outline-[#FF7F50]  data-[state=open]:[&_svg]:rotate-180 data-[state=open]:[&_svg]:stroke-[#FF7F50] [&_svg]:transition-all [&_svg]:duration-300 rounded px-2 py-1 flex justify-between items-center transition-all duration-300"
           >
             <span>{selectedLanguage.name}</span>
-            <ChevronDown className="h-5 w-5 transition-transform" />
+            <ChevronDown className="h-4 w-4 transition-transform" />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-48 max-h-60 overflow-y-auto">

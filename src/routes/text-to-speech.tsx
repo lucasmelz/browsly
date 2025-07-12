@@ -22,10 +22,7 @@ export const Route = createFileRoute("/text-to-speech")({
   component: RouteComponent,
 });
 
-const MODEL_VOICES = Array.from(Array(10).keys()).map((i) => ({
-  name: `Voice ${i + 1}`,
-  id: i,
-}));
+
 
 type Source = "browser" | "model";
 
@@ -55,7 +52,7 @@ function RouteComponent() {
     model: "",
   });
 
-  const [selectedModelVoice, setSelectedModelVoice] = useState(MODEL_VOICES[0]);
+  
   const [audioData, setAudioData] = useState<Float32Array | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -214,7 +211,7 @@ function RouteComponent() {
       worker.current?.postMessage({
         type: "generate",
         text,
-        speaker_id: selectedModelVoice.id,
+        speaker_id: 0,
       });
     }
   };
@@ -312,7 +309,7 @@ function RouteComponent() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="w-full justify-between">
-                  {source === "browser" ? "Browser's API" : "AI Model"}
+                  {source === "browser" ? "Browser's API" : "AI Model (Xenova/speecht5_tts)"}
                   <ChevronDown className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -323,7 +320,7 @@ function RouteComponent() {
                   Browser's API
                 </DropdownMenuItem>
                 <DropdownMenuItem onSelect={() => handleSourceChange("model")}>
-                  AI Model
+                  AI Model (Xenova/speecht5_tts)
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -385,33 +382,7 @@ function RouteComponent() {
                 </DropdownMenu>
               </div>
             </>
-          ) : (
-            <div>
-              <Label className="block text-sm font-medium mb-2">Voice</Label>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-between"
-                    disabled={modelStatus !== "ready"}
-                  >
-                    {selectedModelVoice.name}
-                    <ChevronDown className="w-4 h-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width]">
-                  {MODEL_VOICES.map((voice) => (
-                    <DropdownMenuItem
-                      key={voice.id}
-                      onSelect={() => setSelectedModelVoice(voice)}
-                    >
-                      {voice.name}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          )}
+          ) : null}
         </div>
 
         {source === "model" && modelStatus === "loading" && (
