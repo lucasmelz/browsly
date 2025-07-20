@@ -24,6 +24,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { RequirementsTooltip } from "@/components/RequirementsTooltip";
 
 export const Route = createFileRoute("/transcription")({
   component: RouteComponent,
@@ -174,6 +176,29 @@ const WHISPER_MODELS: WhisperModel[] = [
   },
 ];
 
+const requirements = [
+  {
+    type: "Hardware",
+    description:
+      "A microphone is required for recording audio. A modern CPU is recommended for faster transcription, especially with larger models.",
+  },
+  {
+    type: "Browser",
+    description:
+      "A modern browser with support for the MediaRecorder API (for recording) and Web Workers is required.",
+  },
+  {
+    type: "Network",
+    description:
+      "A stable internet connection is needed to download the selected Whisper model from Hugging Face (approx. 37-240 MB).",
+  },
+  {
+    type: "API/Model",
+    description:
+      "This feature uses a choice of Whisper models (Tiny, Base, Small) from Hugging Face, executed in the browser via Transformers.js.",
+  },
+];
+
 function RouteComponent() {
   // Refs with proper types
   const workerRef = useRef<Worker | null>(null);
@@ -206,6 +231,25 @@ function RouteComponent() {
   const [recordingDuration, setRecordingDuration] = useState<number>(0);
   const [currentAudio, setCurrentAudio] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+
+  const cleanupRecording = useCallback((): void => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    }
+    if (audioContextRef.current && audioContextRef.current.state !== "closed") {
+      audioContextRef.current.close().catch(console.error);
+      audioContextRef.current = null;
+    }
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
+    if (durationIntervalRef.current) {
+      clearInterval(durationIntervalRef.current);
+      durationIntervalRef.current = null;
+    }
+  }, []);
 
   // Initialize worker and load initial model
   useEffect(() => {
@@ -307,7 +351,7 @@ function RouteComponent() {
       }
       cleanupRecording();
     };
-  }, []); // Only run once on mount
+  }, [cleanupRecording, selectedModel]);
 
   // Handle model changes
   useEffect(() => {
@@ -556,7 +600,6 @@ function RouteComponent() {
     }
   };
 
-  // Replace your stopRecording function with this fixed version:
   const stopRecording = (): void => {
     setRecording(false);
     setRecordingDuration(0);
@@ -576,27 +619,6 @@ function RouteComponent() {
 
     cleanupRecording();
   };
-
-  // Update your cleanup function to include the interval:
-  const cleanupRecording = useCallback((): void => {
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach((track) => track.stop());
-      streamRef.current = null;
-    }
-    if (audioContextRef.current && audioContextRef.current.state !== "closed") {
-      audioContextRef.current.close().catch(console.error);
-      audioContextRef.current = null;
-    }
-    if (animationFrameRef.current) {
-      cancelAnimationFrame(animationFrameRef.current);
-      animationFrameRef.current = null;
-    }
-    // FIXED: Clear duration interval in cleanup
-    if (durationIntervalRef.current) {
-      clearInterval(durationIntervalRef.current);
-      durationIntervalRef.current = null;
-    }
-  }, []);
 
   const toggleAudioPlayback = (): void => {
     if (!currentAudio) return;
@@ -673,12 +695,13 @@ function RouteComponent() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 text-center">
-      <div>
-        <h1 className="text-2xl font-bold mb-2">Audio Transcription</h1>
-        <h2 className="text-xl font-semibold">
-          Upload audio files or record directly to get transcriptions
+    <div className="max-w-4xl mx-auto p-6 text-center relative">
+      <div className="text-center flex justify-center items-center flex-col gap-2 mb-8">
+        <h1 className="text-2xl font-bold">Audio Transcription</h1>
+        <h2 className="text-xl font-semibold mb-2">
+        Upload audio files or record directly to get transcriptions
         </h2>
+        <RequirementsTooltip requirements={requirements} />
       </div>
 
       {/* Status Section */}
@@ -714,17 +737,19 @@ function RouteComponent() {
           <DropdownMenuTrigger
             asChild
             disabled={recording || status === "processing" || isLoading}
-            className="w-full disabled:cursor-not-allowed outline p-2 rounded-md hover:not-disabled:outline-[#FF7F50] hover:not-disabled:[&_svg]:stroke-[#FF7F50] focus:not-disabled:outline-[#FF7F50] focus:not-disabled:[&_svg]:stroke-[#FF7F50] data-[state=open]:outline-[#FF7F50] appearance-none transition-colors text-sm font-medium duration-300 flex justify-between items-center data-[state=open]:[&_svg]:rotate-180 data-[state=open]:[&_svg]:stroke-[#FF7F50] [&_svg]:transition-all [&_svg]:duration-300"
           >
-            <button aria-label="Select language" type="button">
+            <Button
+              variant="outline"
+              className="w-full justify-between"
+              aria-label="Select language"
+            >
               <span className="flex w-full items-center justify-between">
                 {selectedModel}
                 <ChevronDown
                   size={15}
-                  className="transition-transform duration-200"
                 />
               </span>
-            </button>
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width]">
             {WHISPER_MODELS.map((model: WhisperModel) => (
@@ -758,9 +783,12 @@ function RouteComponent() {
           <DropdownMenuTrigger
             asChild
             disabled={recording || status === "processing"}
-            className="w-full disabled:cursor-not-allowed outline p-2 rounded-md hover:not-disabled:outline-[#FF7F50] hover:not-disabled:[&_svg]:stroke-[#FF7F50] focus:not-disabled:outline-[#FF7F50] focus:not-disabled:[&_svg]:stroke-[#FF7F50] data-[state=open]:outline-[#FF7F50] appearance-none transition-colors text-sm font-medium duration-300 flex justify-between items-center data-[state=open]:[&_svg]:rotate-180 data-[state=open]:[&_svg]:stroke-[#FF7F50] [&_svg]:transition-all [&_svg]:duration-300"
           >
-            <button aria-label="Select language" type="button">
+            <Button
+              variant="outline"
+              className="w-full justify-between"
+              aria-label="Select language"
+            >
               <span className="flex w-full items-center justify-between">
                 {
                   SUPPORTED_LANGUAGES.find(
@@ -769,10 +797,9 @@ function RouteComponent() {
                 }
                 <ChevronDown
                   size={15}
-                  className="transition-transform duration-200"
                 />
               </span>
-            </button>
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width]">
             <DropdownMenuItem

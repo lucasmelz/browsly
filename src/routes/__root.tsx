@@ -1,7 +1,7 @@
 import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import '../App.css';
-import { Home, NotebookPen, MicVocalIcon, SpeechIcon, Subtitles, SquareChartGanttIcon, ScrollText } from "lucide-react"
+import { Home, MicVocalIcon, SpeechIcon, Subtitles, SquareChartGanttIcon, ScrollText } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -22,7 +22,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 const items = [
   {
     title: "Home",
-    url: "#",
+    url: "/",
     icon: Home,
   },
   {
@@ -31,19 +31,14 @@ const items = [
     icon: SquareChartGanttIcon,
   },
   {
-    title: "Speech to Text",
-    url: "#",
+    title: "Speech to Text + Summarize",
+    url: "/speech-to-text",
     icon: MicVocalIcon,
   },
   {
     title: "Text to Speech",
     url: "/text-to-speech",
     icon: SpeechIcon,
-  },
-  {
-    title: "Summarization",
-    url: "#",
-    icon: NotebookPen,
   },
   {
     title: "Audio Transcription",
@@ -74,7 +69,7 @@ export const Route = createRootRoute({
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <Link to={item.url}>
+                    <Link to={item.url} className="hover:[&_svg]:stroke-[#FF7F50] [&.active]:[&_svg]:stroke-[#FF7F50]">
                       <item.icon />
                       <span>{item.title}</span>
                     </Link>

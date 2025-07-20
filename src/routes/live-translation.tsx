@@ -7,6 +7,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown, X, Mic, Pause } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { RequirementsTooltip } from "@/components/RequirementsTooltip";
 
 export const Route = createFileRoute("/live-translation")({
   component: RouteComponent,
@@ -118,6 +120,24 @@ const languages: Language[] = [
     { code: "tr-TR", name: "Turkish", direction: "ltr" },
     { code: "uk-UA", name: "Ukrainian", direction: "ltr" },
     { code: "ur-PK", name: "Urdu", direction: "rtl" },
+];
+
+const requirements = [
+  {
+    type: "Browser",
+    description:
+      "Google Chrome 138 or later.",
+  },
+  {
+    type: "Platform",
+    description: "Desktop platforms only (Windows, macOS, Linux).",
+  },
+  
+  {
+    type: "Hardware",
+    description:
+      "Requires a microphone, minimum pf 22 GB free disk space and 4+ GB VRAM.",
+  },
 ];
 
 function RouteComponent() {
@@ -325,9 +345,17 @@ function RouteComponent() {
 
   return (
     <div className="w-full max-w-4xl mx-auto py-6 px-4 font-sans">
-      <h1 className="text-2xl sm:text-2xl font-bold mb-6 text-center">
+   
+      <div className="text-center flex justify-center items-center flex-col gap-3 mb-6">
+      <h1 className="text-2xl sm:text-2xl font-bold text-center">
         Bilingual Live Voice Translator
       </h1>
+      <RequirementsTooltip
+        requirements={requirements}
+      />
+      </div>
+   
+   
 
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4 relative flex justify-between items-center">
@@ -411,12 +439,13 @@ function LanguageDropdown({ label, selectedLanguage, onSelect }: { label: string
       <label className="font-semibold">{label}</label>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button
-            className="w-48 border-r-8 border-transparent outline-1 outline-gray-300  hover:not-disabled:outline-[#FF7F50] hover:not-disabled:[&_svg]:stroke-[#FF7F50] focus:not-disabled:outline-[#FF7F50] focus:not-disabled:[&_svg]:stroke-[#FF7F50] data-[state=open]:outline-[#FF7F50] hover:outline-[#FF7F50] focus:outline-[#FF7F50]  data-[state=open]:[&_svg]:rotate-180 data-[state=open]:[&_svg]:stroke-[#FF7F50] [&_svg]:transition-all [&_svg]:duration-300 rounded px-2 py-1 flex justify-between items-center transition-all duration-300"
+          <Button
+            variant="outline"
+            className="w-48 justify-between hover:outline-[#FF7F50] focus:outline-[#FF7F50] data-[state=open]:outline-[#FF7F50] data-[state=open]:[&_svg]:rotate-180 [&_svg]:transition-all [&_svg]:duration-300 hover:[&_svg]:stroke-[#FF7F50] focus:[&_svg]:stroke-[#FF7F50] data-[state=open]:[&_svg]:stroke-[#FF7F50]"
           >
             <span>{selectedLanguage.name}</span>
-            <ChevronDown className="h-4 w-4 transition-transform" />
-          </button>
+            <ChevronDown className="h-4 w-4" />
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-48 max-h-60 overflow-y-auto">
           {languages.map((lang) => (

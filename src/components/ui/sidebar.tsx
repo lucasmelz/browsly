@@ -203,12 +203,12 @@ function Sidebar({
               data-slot="sidebar-trigger"
               variant="ghost"
               size="icon"
-              className={cn("size-7 absolute top-[10px] left-[10px] z-10")}
+              className={cn("size-7 absolute top-[10px] left-[10px] z-10 hover:[&_svg]:stroke-[#FF7F50] cursor-pointer")}
               onClick={() => {
                 setOpenMobile(false);
               }}
             >
-              <PanelLeftIcon />
+              <PanelLeftIcon/>
               <span className="sr-only">Toggle Sidebar</span>
             </Button>
             {children}
@@ -279,7 +279,7 @@ function SidebarTrigger({
       data-slot="sidebar-trigger"
       variant="ghost"
       size="icon"
-      className={cn("size-7", className, { hidden: openMobile })}
+      className={cn("size-7 hover:[&_svg]:stroke-[#FF7F50] cursor-pointer", className, { hidden: openMobile })}
       onClick={(event) => {
         onClick?.(event);
         toggleSidebar();

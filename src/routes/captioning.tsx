@@ -1,6 +1,7 @@
 import { LanguageSelector } from "@/components/LanguageSelector";
 import MediaInput from "@/components/MediaInput";
 import Progress from "@/components/Progress";
+import { RequirementsTooltip } from "@/components/RequirementsTooltip";
 import Transcript from "@/components/Transcript";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,10 +35,33 @@ async function hasWebGPU() {
   try {
     const adapter = await navigator.gpu.requestAdapter();
     return !!adapter;
-  } catch (e) {
+  } catch (e: unknown) {
     return false;
   }
 }
+
+const requirements = [
+  {
+    type: "Hardware",
+    description:
+      "This feature runs a 73 million parameter model. WebGPU is recommended for better performance. The system will automatically detect and use the best available hardware (WebGPU or WebAssembly).",
+  },
+  {
+    type: "Browser",
+    description:
+      "A modern browser with support for WebGPU (e.g., Chrome, Edge) is recommended for optimal performance.",
+  },
+  {
+    type: "Network",
+    description:
+      "A stable internet connection is required to download the AI model (approx. 77-196 MB) from Hugging Face.",
+  },
+  {
+    type: "API/Model",
+    description:
+      "This feature uses the onnx-community/whisper-base_timestamped model from Hugging Face for transcription and translation.",
+  },
+];
 
 function RouteComponent() {
   // Create a reference to the worker object.
@@ -61,11 +85,9 @@ function RouteComponent() {
   const [currentTime, setCurrentTime] = useState(0);
 
   const [device, setDevice] = useState("webgpu"); // Try use WebGPU first
-  const [modelSize, setModelSize] = useState("gpu" in navigator ? 196 : 77); // WebGPU=196MB, WebAssembly=77MB
 
   useEffect(() => {
     hasWebGPU().then((result) => {
-      setModelSize(result ? 196 : 77);
       setDevice(result ? "webgpu" : "wasm");
     });
   }, []);
@@ -158,8 +180,8 @@ function RouteComponent() {
   // Function to handle SRT download
   const handleDownloadSRT = useCallback(() => {
     if (!result) return;
-    
-    const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+
+    const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, "-");
     const baseFilename = `subtitles_${timestamp}`;
     downloadSRT(result, baseFilename);
   }, [result]);
@@ -176,21 +198,20 @@ function RouteComponent() {
     <div className="w-screen h-screen">
       <div className="flex flex-col mx-auto items justify-end max-w-[560px] h-full">
         <div className="h-full flex items-center flex-col relative">
-          <div className="flex flex-col items-center text-center pt-6">
-            <h1 className="text-2xl font-bold mb-2">
+          <div className="text-center flex justify-center items-center flex-col gap-2 mb-8 mt-6">
+            <h1 className="text-2xl font-bold">
               Audio/Video Captioning & Translation
             </h1>
-            <h2 className="text-xl font-semibold">
-              Generate and download subtitles for video or audio
+            <h2 className="text-xl font-semibold mb-2">
+              Generate and download SRT subtitles for video or audio
             </h2>
+            <RequirementsTooltip requirements={requirements} />
           </div>
 
           <div className="w-full min-h-[220px] flex flex-col justify-center items-center p-2">
             {status === "loading" && (
               <div className="w-[500px] my-2">
-                <p className="text-center mb-2 text-md">
-                  {loadingMessage}
-                </p>
+                <p className="text-center mb-2 text-md">{loadingMessage}</p>
                 {progressItems.map(({ file, progress, total }, i) => (
                   <Progress
                     key={i}
@@ -202,7 +223,7 @@ function RouteComponent() {
               </div>
             )}
 
-            {!audio && status !== 'loading' && (
+            {!audio && status !== "loading" && (
               <p className="mb-2">
                 You are about to download{" "}
                 <a
@@ -237,19 +258,16 @@ function RouteComponent() {
                   <DropdownMenu>
                     {/* value={task} onValueChange={setTask} */}
                     <DropdownMenuTrigger asChild>
-                      <button
-                        className="w-42 outline p-[6px] rounded-md hover:outline-[#FF7F50] hover:[&_svg]:stroke-[#FF7F50] focus:outline-[#FF7F50] focus:[&_svg]:stroke-[#FF7F50] data-[state=open]:outline-[#FF7F50] appearance-none transition-colors text-sm font-medium duration-300 flex justify-between items-center data-[state=open]:[&_svg]:rotate-180 data-[state=open]:[&_svg]:stroke-[#FF7F50] [&_svg]:transition-all [&_svg]:duration-300"
+                      <Button
+                        variant="outline"
+                        className="w-42 justify-between"
                         aria-label="Select task"
-                        type="button"
                       >
                         <span className="flex w-full items-center justify-between">
                           {titleCase(task)}
-                          <ChevronDown
-                            size={15}
-                            className="transition-transform duration-200"
-                          />
+                          <ChevronDown size={15} />
                         </span>
-                      </button>
+                      </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                       <DropdownMenuItem onSelect={() => setTask("transcribe")}>

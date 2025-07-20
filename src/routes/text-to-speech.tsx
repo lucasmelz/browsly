@@ -17,6 +17,7 @@ import { Play, Download, ChevronDown, Square } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import Progress from "@/components/Progress";
+import { RequirementsTooltip } from "@/components/RequirementsTooltip";
 
 export const Route = createFileRoute("/text-to-speech")({
   component: RouteComponent,
@@ -26,6 +27,29 @@ export const Route = createFileRoute("/text-to-speech")({
 
 type Source = "browser" | "model";
 
+const requirements = [
+  {
+    type: "Hardware",
+    description:
+      "No special hardware is required, but a modern CPU will improve performance when using the AI model.",
+  },
+  {
+    type: "Browser",
+    description:
+      "This feature supports both the browser's native Text-to-Speech API and an AI model. A modern browser is recommended for both.",
+  },
+  {
+    type: "Network",
+    description:
+      "A stable internet connection is required to download the AI model (Xenova/speecht5_tts, approx. 250MB) when the model-based synthesis is selected.",
+  },
+  {
+    type: "API/Model",
+    description:
+      "This page can use either the browser's built-in SpeechSynthesis API or the Xenova/speecht5_tts model from Hugging Face.",
+  },
+];
+
 function RouteComponent() {
   const [text, setText] = useState(
     "I have a dream that one day this nation will rise up and live out the true meaning of its creed."
@@ -34,6 +58,7 @@ function RouteComponent() {
 
   // Browser API state
   const [browserVoices, setBrowserVoices] = useState<SpeechSynthesisVoice[]>(
+
     []
   );
   const [selectedBrowserVoice, setSelectedBrowserVoice] =
@@ -281,13 +306,16 @@ function RouteComponent() {
     (source === "model" && modelStatus !== "ready");
 
   return (
-    <div className="max-w-4xl mx-auto p-6 text-center">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-2">Text-to-Speech</h1>
-        <h2 className="text-xl font-semibold">
-          Type in text, select a source and voice, and play or download the
-          audio.
-        </h2>
+    <div className="max-w-4xl mx-auto p-6 text-center relative">
+
+<div className="text-center flex justify-center items-center flex-col gap-2 mb-8">
+        <h1 className="text-2xl font-bold">Text-to-Speech</h1>
+        <h2 className="text-xl font-semibold mb-2">
+        Type in text, select a source and voice, and play or download the
+        audio.        </h2>
+        <RequirementsTooltip
+        requirements={requirements}
+      />
       </div>
 
       <div className="grid w-full gap-4">

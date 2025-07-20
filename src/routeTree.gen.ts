@@ -11,9 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TranscriptionRouteImport } from './routes/transcription'
 import { Route as TextToSpeechRouteImport } from './routes/text-to-speech'
+import { Route as SpeechToTextRouteImport } from './routes/speech-to-text'
 import { Route as LiveTranslationRouteImport } from './routes/live-translation'
 import { Route as CaptioningRouteImport } from './routes/captioning'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
 const TranscriptionRoute = TranscriptionRouteImport.update({
@@ -26,6 +26,11 @@ const TextToSpeechRoute = TextToSpeechRouteImport.update({
   path: '/text-to-speech',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SpeechToTextRoute = SpeechToTextRouteImport.update({
+  id: '/speech-to-text',
+  path: '/speech-to-text',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LiveTranslationRoute = LiveTranslationRouteImport.update({
   id: '/live-translation',
   path: '/live-translation',
@@ -36,11 +41,6 @@ const CaptioningRoute = CaptioningRouteImport.update({
   path: '/captioning',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -49,26 +49,26 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/captioning': typeof CaptioningRoute
   '/live-translation': typeof LiveTranslationRoute
+  '/speech-to-text': typeof SpeechToTextRoute
   '/text-to-speech': typeof TextToSpeechRoute
   '/transcription': typeof TranscriptionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/captioning': typeof CaptioningRoute
   '/live-translation': typeof LiveTranslationRoute
+  '/speech-to-text': typeof SpeechToTextRoute
   '/text-to-speech': typeof TextToSpeechRoute
   '/transcription': typeof TranscriptionRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/captioning': typeof CaptioningRoute
   '/live-translation': typeof LiveTranslationRoute
+  '/speech-to-text': typeof SpeechToTextRoute
   '/text-to-speech': typeof TextToSpeechRoute
   '/transcription': typeof TranscriptionRoute
 }
@@ -76,34 +76,34 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/about'
     | '/captioning'
     | '/live-translation'
+    | '/speech-to-text'
     | '/text-to-speech'
     | '/transcription'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/about'
     | '/captioning'
     | '/live-translation'
+    | '/speech-to-text'
     | '/text-to-speech'
     | '/transcription'
   id:
     | '__root__'
     | '/'
-    | '/about'
     | '/captioning'
     | '/live-translation'
+    | '/speech-to-text'
     | '/text-to-speech'
     | '/transcription'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
   CaptioningRoute: typeof CaptioningRoute
   LiveTranslationRoute: typeof LiveTranslationRoute
+  SpeechToTextRoute: typeof SpeechToTextRoute
   TextToSpeechRoute: typeof TextToSpeechRoute
   TranscriptionRoute: typeof TranscriptionRoute
 }
@@ -124,6 +124,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TextToSpeechRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/speech-to-text': {
+      id: '/speech-to-text'
+      path: '/speech-to-text'
+      fullPath: '/speech-to-text'
+      preLoaderRoute: typeof SpeechToTextRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/live-translation': {
       id: '/live-translation'
       path: '/live-translation'
@@ -138,13 +145,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CaptioningRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -157,9 +157,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
   CaptioningRoute: CaptioningRoute,
   LiveTranslationRoute: LiveTranslationRoute,
+  SpeechToTextRoute: SpeechToTextRoute,
   TextToSpeechRoute: TextToSpeechRoute,
   TranscriptionRoute: TranscriptionRoute,
 }
