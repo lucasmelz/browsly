@@ -58,9 +58,9 @@ function Index() {
       <section className="mb-12">
         <div className="flex items-center justify-center p-6 rounded-lg">
           <div className="text-center">
-            <h2 className="text-3xl font-semibold mb-4">What is Browlsy?</h2>
+            <h2 className="text-3xl font-semibold mb-4">What is Browsly?</h2>
             <p className="text-lg leading-relaxed">
-              Browlsy is a web application that brings the power of modern AI
+              Browsly is a web application that brings the power of modern AI
               directly to your browser. We use native browser APIs and
               cutting-edge libraries like Transformers.js to provide a suite of
               powerful tools without compromising your privacy.
