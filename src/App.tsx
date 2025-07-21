@@ -72,8 +72,8 @@ function App() {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-      <SidebarTrigger className='absolute top-[10px] left-[10px] z-10'/>
-      <ModeToggle className='absolute top-[10px] right-[10px] z-50'/>
+      <SidebarTrigger className='sticky top-[10px] left-[10px] z-10'/>
+      <ModeToggle className='sticky top-[10px] right-[10px] z-50'/>
     </>
   )
 }

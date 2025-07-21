@@ -24,7 +24,8 @@ export const Route = createFileRoute("/captioning")({
 
 declare global {
   interface Navigator {
-    readonly gpu: GPU;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    readonly gpu: any;
   }
 }
 
@@ -35,6 +36,7 @@ async function hasWebGPU() {
   try {
     const adapter = await navigator.gpu.requestAdapter();
     return !!adapter;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e: unknown) {
     return false;
   }
@@ -63,6 +65,12 @@ const requirements = [
   },
 ];
 
+interface ProgressItem {
+  file: string;
+  progress: number;
+  total: number;
+}
+
 function RouteComponent() {
   // Create a reference to the worker object.
   const worker = useRef<Worker | null>(null);
@@ -70,18 +78,19 @@ function RouteComponent() {
   // Model loading and progress
   const [status, setStatus] = useState<string | null>(null);
   const [loadingMessage, setLoadingMessage] = useState("");
-  const [progressItems, setProgressItems] = useState([]);
+  const [progressItems, setProgressItems] = useState<ProgressItem[]>([]);
 
-  const mediaInputRef = useRef(null);
-  const [audio, setAudio] = useState(null);
+  const mediaInputRef = useRef<{ setMediaTime: (time: number) => void; } | null>(null);
+  const [audio, setAudio] = useState<Float32Array | null>(null);
 
   // Language and task settings
   const [sourceLanguage, setSourceLanguage] = useState("en");
   const [targetLanguage, setTargetLanguage] = useState("en");
   const [task, setTask] = useState("transcribe"); // "transcribe" or "translate"
 
-  const [result, setResult] = useState(null);
-  const [time, setTime] = useState(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [result, setResult] = useState<any>(null);
+  const [time, setTime] = useState<number | null>(null);
   const [currentTime, setCurrentTime] = useState(0);
 
   const [device, setDevice] = useState("webgpu"); // Try use WebGPU first
@@ -95,15 +104,13 @@ function RouteComponent() {
   // We use the `useEffect` hook to setup the worker as soon as the `App` component is mounted.
   useEffect(() => {
     // Create the worker if it does not yet exist.
-    worker.current ??= new Worker(
-      new URL("../lib/captioning/worker.js", import.meta.url),
-      {
+    worker.current ??=
+      new Worker(new URL("../lib/captioning/worker.js", import.meta.url), {
         type: "module",
-      }
-    );
+      });
 
     // Create a callback function for messages from the worker thread.
-    const onMessageReceived = (e) => {
+    const onMessageReceived = (e: MessageEvent) => {
       switch (e.data.status) {
         case "loading":
           // Model file start load: add a new progress item to the list.
@@ -140,7 +147,6 @@ function RouteComponent() {
           break;
 
         case "complete":
-          console.log("Result: ", e.data.result);
           setResult(e.data.result);
           setTime(e.data.time);
           setStatus("ready");
@@ -195,8 +201,8 @@ function RouteComponent() {
   }, [task, sourceLanguage, targetLanguage]);
 
   return (
-    <div className="w-screen h-screen">
-      <div className="flex flex-col mx-auto items justify-end max-w-[560px] h-full">
+    <div className="w-full h-screen flex justify-center">
+      <div className="flex flex-col items justify-end max-w-[560px] h-full">
         <div className="h-full flex items-center flex-col relative">
           <div className="text-center flex justify-center items-center flex-col gap-2 mb-8 mt-6">
             <h1 className="text-2xl font-bold">

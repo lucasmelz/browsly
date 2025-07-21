@@ -76,11 +76,9 @@ const Transcript = ({
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleChunkClick =
-    (chunk: ChunkData) =>
-    (_e: React.MouseEvent<HTMLSpanElement>): void => {
-      setCurrentTime(chunk.timestamp[0]); // Set to start of chunk
-    };
+  const handleChunkClick = (chunk: ChunkData) => (): void => {
+    setCurrentTime(chunk.timestamp[0]); // Set to start of chunk
+  };
 
   return (
     <>

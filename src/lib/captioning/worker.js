@@ -119,8 +119,6 @@ async function run({ audio, sourceLanguage, targetLanguage, task }) {
 self.addEventListener("message", async (e) => {
   const { type, data } = e.data;
 
-  console.log(e.data);
-
   switch (type) {
     case "load":
       load(data);

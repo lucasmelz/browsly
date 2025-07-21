@@ -52,7 +52,7 @@ const requirements = [
 
 function RouteComponent() {
   const [text, setText] = useState(
-    "I have a dream that one day this nation will rise up and live out the true meaning of its creed."
+    "The greatness of a nation and its moral progress can be judged by the way its animals are treated."
   );
   const [source, setSource] = useState<Source>("browser");
 

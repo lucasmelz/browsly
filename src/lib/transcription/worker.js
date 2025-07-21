@@ -32,9 +32,7 @@ self.onmessage = async (e) => {
 
                 model = await pipeline('automatic-speech-recognition', requestedModel, {
                     task: 'translate',
-                    progress_callback: (info) => {
-                        console.log('Model loading progress:', info);
-                        
+                    progress_callback: (info) => {                        
                         if (info.file) {
                             // Track new files with byte information
                             if (!fileProgress.has(info.file)) {
@@ -72,14 +70,14 @@ self.onmessage = async (e) => {
                                 ? (totalBytesLoaded / totalBytesOverall) * 100 
                                 : 0;
 
-                            console.log('Progress state:', {
-                                fileProgress: Object.fromEntries(fileProgress),
-                                completedFiles: Array.from(completedFiles),
-                                totalFiles,
-                                totalBytesLoaded: `${(totalBytesLoaded / 1024 / 1024).toFixed(2)} MB`,
-                                totalBytesOverall: `${(totalBytesOverall / 1024 / 1024).toFixed(2)} MB`,
-                                bytesProgress: `${bytesProgress.toFixed(2)}%`
-                            });
+                            // console.log('Progress state:', {
+                            //     fileProgress: Object.fromEntries(fileProgress),
+                            //     completedFiles: Array.from(completedFiles),
+                            //     totalFiles,
+                            //     totalBytesLoaded: `${(totalBytesLoaded / 1024 / 1024).toFixed(2)} MB`,
+                            //     totalBytesOverall: `${(totalBytesOverall / 1024 / 1024).toFixed(2)} MB`,
+                            //     bytesProgress: `${bytesProgress.toFixed(2)}%`
+                            // });
                             
                             // Format progress message with MB information
                             let progressText = '';
@@ -168,12 +166,12 @@ self.onmessage = async (e) => {
                 throw new Error('Audio data is empty');
             }
 
-            console.log('Audio data info:', {
-                type: audioFloat32.constructor.name,
-                length: audioFloat32.length,
-                sample: audioFloat32.slice(0, 10),
-                model: currentModelName
-            });
+            // console.log('Audio data info:', {
+            //     type: audioFloat32.constructor.name,
+            //     length: audioFloat32.length,
+            //     sample: audioFloat32.slice(0, 10),
+            //     model: currentModelName
+            // });
 
             // Perform transcription
             const options = {};
@@ -181,14 +179,14 @@ self.onmessage = async (e) => {
                 options.language = targetLanguage;
             }
 
-            console.log('Starting transcription with options:', options);
+            // console.log('Starting transcription with options:', options);
             
             const result = await model(audioFloat32, options);
             
-            console.log('Transcription completed:', {
-                text: result.text,
-                model: currentModelName
-            });
+            // console.log('Transcription completed:', {
+            //     text: result.text,
+            //     model: currentModelName
+            // });
             
             self.postMessage({ type: 'result', text: result.text });
 

@@ -58,5 +58,4 @@ self.onclose = () => {
     if (transcriber) {
         transcriber = null; // Release resources
     }
-    console.log('Whisper worker terminated.');
 };

@@ -267,8 +267,6 @@ function RouteComponent() {
         workerRef.current.onmessage = (e: MessageEvent<WorkerMessage>) => {
           const { type, text, error, percentage } = e.data;
 
-          console.log("Message: ", type, text, error, percentage);
-
           switch (type) {
             case "progress":
               if (text !== undefined && percentage !== undefined) {
@@ -390,19 +388,17 @@ function RouteComponent() {
     audioBuffer: ArrayBuffer
   ): Promise<Float32Array> => {
     try {
-      console.log("Processing audio buffer:", audioBuffer.byteLength, "bytes");
-
       const audioContext = new (window.AudioContext ||
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (window as any).webkitAudioContext)();
       const audioData = await audioContext.decodeAudioData(audioBuffer);
 
-      console.log("Decoded audio data:", {
-        sampleRate: audioData.sampleRate,
-        length: audioData.length,
-        duration: audioData.duration,
-        channels: audioData.numberOfChannels,
-      });
+      // console.log("Decoded audio data:", {
+      //   sampleRate: audioData.sampleRate,
+      //   length: audioData.length,
+      //   duration: audioData.duration,
+      //   channels: audioData.numberOfChannels,
+      // });
 
       // Resample to 16kHz mono (Whisper's expected format)
       const targetSampleRate = 16000;
@@ -419,15 +415,15 @@ function RouteComponent() {
         result[i] = inputData[index];
       }
 
-      console.log("Processed audio for Whisper:", {
-        originalSampleRate: audioData.sampleRate,
-        targetSampleRate: targetSampleRate,
-        originalLength: audioData.length,
-        resampledLength: result.length,
-        duration: result.length / targetSampleRate,
-        dataType: result.constructor.name,
-        sample: Array.from(result.slice(0, 10)),
-      });
+      // console.log("Processed audio for Whisper:", {
+      //   originalSampleRate: audioData.sampleRate,
+      //   targetSampleRate: targetSampleRate,
+      //   originalLength: audioData.length,
+      //   resampledLength: result.length,
+      //   duration: result.length / targetSampleRate,
+      //   dataType: result.constructor.name,
+      //   sample: Array.from(result.slice(0, 10)),
+      // });
 
       // Validate the result
       if (result.length === 0) {

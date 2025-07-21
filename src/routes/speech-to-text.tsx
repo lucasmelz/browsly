@@ -125,6 +125,12 @@ function RouteComponent() {
 
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      setError(
+        "Speech Recognition API is not supported in this browser. Please try Chrome or Edge."
+      );
+      return;
+    }
     const recognition = new SpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;

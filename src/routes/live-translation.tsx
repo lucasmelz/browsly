@@ -185,6 +185,10 @@ function RouteComponent() {
 
     if (isSpeechSupported) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        setError("Speech Recognition API is not supported in this browser. Please try Chrome or Edge.");
+        return;
+      }
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = true;
       recognitionRef.current.interimResults = true;
@@ -223,6 +227,7 @@ function RouteComponent() {
         try {
           const result = await translatorRef.current!.translate(transcript);
           setTranslation(result);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (e: any) {
           setError(`Translation failed: ${e.message}`);
         }
@@ -259,6 +264,7 @@ function RouteComponent() {
       });
       
       setIsTranslatorReady(true);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
       setError(`Failed to initialize translator: ${e.message}`);
     } finally {

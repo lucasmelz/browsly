@@ -81,10 +81,12 @@ export const Route = createRootRoute({
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-    <Outlet />
-    <TanStackRouterDevtools />
-      <SidebarTrigger className='absolute top-[10px] left-[10px] z-999'/>
-      <ModeToggle className='absolute top-[10px] right-[10px] z-50'/>
+    <div className="relative flex-1">
+      <Outlet />
+      <TanStackRouterDevtools />
+      <SidebarTrigger className='fixed top-[10px] left-[10px] z-50'/>
+      <ModeToggle className='fixed top-[10px] right-[10px] z-50'/>
+    </div>
 
 
       {/* <div className="p-2 flex gap-2">
