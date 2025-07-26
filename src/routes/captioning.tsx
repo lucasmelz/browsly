@@ -208,7 +208,7 @@ function RouteComponent() {
             <h1 className="text-2xl font-bold">
               Audio/Video Captioning & Translation
             </h1>
-            <h2 className="text-xl font-semibold mb-2">
+            <h2 className="text-xl font-semibold mb-2 text-muted-foreground">
               Generate and download SRT subtitles for video or audio
             </h2>
             <RequirementsTooltip requirements={requirements} />

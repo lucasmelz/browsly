@@ -1,7 +1,7 @@
 import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import '../App.css';
-import { Home, MicVocalIcon, SpeechIcon, Subtitles, SquareChartGanttIcon, ScrollText } from "lucide-react"
+import { Home, MicVocalIcon, SpeechIcon, Subtitles, SquareChartGanttIcon, ScrollText, FileText } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -49,6 +49,11 @@ const items = [
     title: "Generate Captions",
     url: "/captioning",
     icon: Subtitles,
+  },
+  {
+    title: "PDF Summarizer",
+    url: "/summarize-pdf",
+    icon: FileText,
   },
 ]
 

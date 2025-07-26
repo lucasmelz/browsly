@@ -6,6 +6,7 @@ import {
   SpeechIcon,
   SquareChartGanttIcon,
   Subtitles,
+  FileText
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -42,6 +43,12 @@ const features = [
     title: "Generate Captions",
     description:
       "Create SRT-formatted subtitles for your videos and audio files, with support for translation.",
+  },
+  {
+    icon: <FileText className="h-12 w-12 text-pink-500" />,
+    title: "PDF Summarizer",
+    description:
+      "Get a summary of a PDF choosing between different summary types, formats and length.",
   },
 ];
 
@@ -89,7 +96,7 @@ function Index() {
         <h2 className="text-3xl font-semibold text-center mb-8">
           Our Features
         </h2>
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 gap-2">
           {features.map((feature) => (
             <div
               key={feature.title}
@@ -103,7 +110,7 @@ function Index() {
         </div>
       </section>
 
-      <footer className="text-center mt-2">
+      <footer className="text-center mt-8">
         <p className="text-muted-foreground">
           <a
             href="https://buymeacoffee.com/lucaswmelz"

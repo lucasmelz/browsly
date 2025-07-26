@@ -19,4 +19,18 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  esbuild: {
+    target: 'esnext'
+  },
+  build: {
+    target: 'esnext'
+  },
+  optimizeDeps: {
+    // Force pre-bundle scribe.js-ocr
+    include: ['scribe.js-ocr']
+  },
+  worker: {
+    // Enable module workers
+    format: 'es'
+  }
 });

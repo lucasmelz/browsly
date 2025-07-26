@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TranscriptionRouteImport } from './routes/transcription'
 import { Route as TextToSpeechRouteImport } from './routes/text-to-speech'
+import { Route as SummarizePdfRouteImport } from './routes/summarize-pdf'
 import { Route as SpeechToTextRouteImport } from './routes/speech-to-text'
 import { Route as LiveTranslationRouteImport } from './routes/live-translation'
 import { Route as CaptioningRouteImport } from './routes/captioning'
@@ -24,6 +25,11 @@ const TranscriptionRoute = TranscriptionRouteImport.update({
 const TextToSpeechRoute = TextToSpeechRouteImport.update({
   id: '/text-to-speech',
   path: '/text-to-speech',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SummarizePdfRoute = SummarizePdfRouteImport.update({
+  id: '/summarize-pdf',
+  path: '/summarize-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SpeechToTextRoute = SpeechToTextRouteImport.update({
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/captioning': typeof CaptioningRoute
   '/live-translation': typeof LiveTranslationRoute
   '/speech-to-text': typeof SpeechToTextRoute
+  '/summarize-pdf': typeof SummarizePdfRoute
   '/text-to-speech': typeof TextToSpeechRoute
   '/transcription': typeof TranscriptionRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/captioning': typeof CaptioningRoute
   '/live-translation': typeof LiveTranslationRoute
   '/speech-to-text': typeof SpeechToTextRoute
+  '/summarize-pdf': typeof SummarizePdfRoute
   '/text-to-speech': typeof TextToSpeechRoute
   '/transcription': typeof TranscriptionRoute
 }
@@ -69,6 +77,7 @@ export interface FileRoutesById {
   '/captioning': typeof CaptioningRoute
   '/live-translation': typeof LiveTranslationRoute
   '/speech-to-text': typeof SpeechToTextRoute
+  '/summarize-pdf': typeof SummarizePdfRoute
   '/text-to-speech': typeof TextToSpeechRoute
   '/transcription': typeof TranscriptionRoute
 }
@@ -79,6 +88,7 @@ export interface FileRouteTypes {
     | '/captioning'
     | '/live-translation'
     | '/speech-to-text'
+    | '/summarize-pdf'
     | '/text-to-speech'
     | '/transcription'
   fileRoutesByTo: FileRoutesByTo
@@ -87,6 +97,7 @@ export interface FileRouteTypes {
     | '/captioning'
     | '/live-translation'
     | '/speech-to-text'
+    | '/summarize-pdf'
     | '/text-to-speech'
     | '/transcription'
   id:
@@ -95,6 +106,7 @@ export interface FileRouteTypes {
     | '/captioning'
     | '/live-translation'
     | '/speech-to-text'
+    | '/summarize-pdf'
     | '/text-to-speech'
     | '/transcription'
   fileRoutesById: FileRoutesById
@@ -104,6 +116,7 @@ export interface RootRouteChildren {
   CaptioningRoute: typeof CaptioningRoute
   LiveTranslationRoute: typeof LiveTranslationRoute
   SpeechToTextRoute: typeof SpeechToTextRoute
+  SummarizePdfRoute: typeof SummarizePdfRoute
   TextToSpeechRoute: typeof TextToSpeechRoute
   TranscriptionRoute: typeof TranscriptionRoute
 }
@@ -122,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/text-to-speech'
       fullPath: '/text-to-speech'
       preLoaderRoute: typeof TextToSpeechRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/summarize-pdf': {
+      id: '/summarize-pdf'
+      path: '/summarize-pdf'
+      fullPath: '/summarize-pdf'
+      preLoaderRoute: typeof SummarizePdfRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/speech-to-text': {
@@ -160,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   CaptioningRoute: CaptioningRoute,
   LiveTranslationRoute: LiveTranslationRoute,
   SpeechToTextRoute: SpeechToTextRoute,
+  SummarizePdfRoute: SummarizePdfRoute,
   TextToSpeechRoute: TextToSpeechRoute,
   TranscriptionRoute: TranscriptionRoute,
 }

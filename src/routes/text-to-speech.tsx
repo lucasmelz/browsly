@@ -310,7 +310,7 @@ function RouteComponent() {
 
 <div className="text-center flex justify-center items-center flex-col gap-2 mb-8">
         <h1 className="text-2xl font-bold">Text-to-Speech</h1>
-        <h2 className="text-xl font-semibold mb-2">
+        <h2 className="text-xl font-semibold mb-2 text-muted-foreground">
         Type in text, select a source and voice, and play or download the
         audio.        </h2>
         <RequirementsTooltip

@@ -694,7 +694,7 @@ function RouteComponent() {
     <div className="max-w-4xl mx-auto p-6 text-center relative">
       <div className="text-center flex justify-center items-center flex-col gap-2 mb-8">
         <h1 className="text-2xl font-bold">Audio Transcription</h1>
-        <h2 className="text-xl font-semibold mb-2">
+        <h2 className="text-xl font-semibold mb-2 text-muted-foreground">
         Upload audio files or record directly to get transcriptions
         </h2>
         <RequirementsTooltip requirements={requirements} />
