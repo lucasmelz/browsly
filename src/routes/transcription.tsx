@@ -16,6 +16,7 @@ import {
   CheckCircle,
   Loader2,
   ChevronDown,
+  CopyIcon,
 } from "lucide-react";
 import Progress from "@/components/Progress";
 import {
@@ -231,6 +232,7 @@ function RouteComponent() {
   const [recordingDuration, setRecordingDuration] = useState<number>(0);
   const [currentAudio, setCurrentAudio] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
   const cleanupRecording = useCallback((): void => {
     if (streamRef.current) {
@@ -269,6 +271,7 @@ function RouteComponent() {
 
           switch (type) {
             case "progress":
+              console.log(percentage);
               if (text !== undefined && percentage !== undefined) {
                 setProgress({ text, percentage });
               }
@@ -452,6 +455,17 @@ function RouteComponent() {
     event: React.ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
     const file = event.target?.files?.[0];
+    try {
+      startProcessingFile(file);
+    } finally {
+      // Reset file input
+      if (event.target) {
+        event.target.value = "";
+      }
+    }
+  };
+
+  const startProcessingFile = async (file: File | undefined) => {
     if (!file || !workerRef.current) return;
 
     try {
@@ -478,11 +492,6 @@ function RouteComponent() {
         err instanceof Error ? err.message : "File processing failed";
       setError(`File processing error: ${errorMessage}`);
       setStatus("error");
-    } finally {
-      // Reset file input
-      if (event.target) {
-        event.target.value = "";
-      }
     }
   };
 
@@ -690,12 +699,60 @@ function RouteComponent() {
     return WHISPER_MODELS.find((model) => model.name === selectedModel);
   };
 
+  // Drag and drop handlers
+  const handleDragOver = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!isDragOver) {
+        setIsDragOver(true);
+      }
+    },
+    [isDragOver]
+  );
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Only set isDragOver to false if we're leaving the drop zone entirely
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX;
+    const y = e.clientY;
+
+    if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+      setIsDragOver(false);
+    }
+  }, []);
+
+  const handleDrop = useCallback(
+    async (e: React.DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragOver(false);
+
+      if (recording || status === "processing") {
+        return;
+      }
+
+      const files = Array.from(e.dataTransfer.files);
+      const audioFile = files.find((file) => file.type.startsWith("audio/"));
+
+      if (audioFile) {
+        await startProcessingFile(audioFile);
+      } else if (files.length > 0) {
+        setError("Please drop an audio file");
+      }
+    },
+    [recording, startProcessingFile, status]
+  );
+
   return (
     <div className="max-w-4xl mx-auto p-6 text-center relative">
       <div className="text-center flex justify-center items-center flex-col gap-2 mb-8">
         <h1 className="text-2xl font-bold">Audio Transcription</h1>
         <h2 className="text-xl font-semibold mb-2 text-muted-foreground">
-        Upload audio files or record directly to get transcriptions
+          Upload audio files or record directly to get transcriptions
         </h2>
         <RequirementsTooltip requirements={requirements} />
       </div>
@@ -741,9 +798,7 @@ function RouteComponent() {
             >
               <span className="flex w-full items-center justify-between">
                 {selectedModel}
-                <ChevronDown
-                  size={15}
-                />
+                <ChevronDown size={15} />
               </span>
             </Button>
           </DropdownMenuTrigger>
@@ -791,9 +846,7 @@ function RouteComponent() {
                     (language) => language.code === targetLanguage
                   )?.name
                 }
-                <ChevronDown
-                  size={15}
-                />
+                <ChevronDown size={15} />
               </span>
             </Button>
           </DropdownMenuTrigger>
@@ -848,7 +901,14 @@ function RouteComponent() {
         <label className="block text-sm font-medium mb-2">
           Or upload an audio file:
         </label>
-        <div className="relative">
+        <div 
+          className={`relative transition-all duration-200 ${
+            isDragOver ? "scale-105" : ""
+          }`}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
           <input
             type="file"
             accept="audio/*"
@@ -895,19 +955,18 @@ function RouteComponent() {
 
       {/* Results Section */}
       {result && (
-        <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+        <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg relative">
+          <CopyIcon
+            onClick={copyToClipboard}
+            size={28}
+            className="absolute right-2 top-2 text-green-800 cursor-pointer rounded-md p-1 border border-green-800 hover:scale-105 transition-all duration-300"
+          />
           <h3 className="font-semibold text-green-800 mb-2">
             Transcription Result:
           </h3>
-          <p className="text-green-700 leading-relaxed whitespace-pre-wrap">
+          <p className="text-green-700 leading-relaxed whitespace-pre-wrap text-justify">
             {result}
           </p>
-          <button
-            onClick={copyToClipboard}
-            className="mt-2 text-sm text-green-600 hover:text-green-800 underline transition-colors"
-          >
-            Copy to clipboard
-          </button>
         </div>
       )}
     </div>

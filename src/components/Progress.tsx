@@ -24,7 +24,7 @@ export default function Progress({ text, percentage, total, model, status, file 
         style={{ width: `${percentage}%` }}
       >
         {status === 'progress' ? `Downloading ${file}` : text}
-        {percentage > 0 && ` (${percentage.toFixed(2)}% of ${formatBytes(total!)})`}
+        {percentage > 0 && ` ${percentage.toFixed(2)}%`} {total && ` of ${formatBytes(total!)}`}
         {model && ` - ${model}`}
       </div>
     </div>

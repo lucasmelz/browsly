@@ -69,15 +69,6 @@ self.onmessage = async (e) => {
                             const bytesProgress = totalBytesOverall > 0 
                                 ? (totalBytesLoaded / totalBytesOverall) * 100 
                                 : 0;
-
-                            // console.log('Progress state:', {
-                            //     fileProgress: Object.fromEntries(fileProgress),
-                            //     completedFiles: Array.from(completedFiles),
-                            //     totalFiles,
-                            //     totalBytesLoaded: `${(totalBytesLoaded / 1024 / 1024).toFixed(2)} MB`,
-                            //     totalBytesOverall: `${(totalBytesOverall / 1024 / 1024).toFixed(2)} MB`,
-                            //     bytesProgress: `${bytesProgress.toFixed(2)}%`
-                            // });
                             
                             // Format progress message with MB information
                             let progressText = '';
@@ -166,27 +157,47 @@ self.onmessage = async (e) => {
                 throw new Error('Audio data is empty');
             }
 
-            // console.log('Audio data info:', {
-            //     type: audioFloat32.constructor.name,
-            //     length: audioFloat32.length,
-            //     sample: audioFloat32.slice(0, 10),
-            //     model: currentModelName
-            // });
+            console.log('Audio data info:', {
+                type: audioFloat32.constructor.name,
+                length: audioFloat32.length,
+                durationSeconds: audioFloat32.length / 16000, // Assuming 16kHz sample rate
+                sample: audioFloat32.slice(0, 10),
+                model: currentModelName
+            });
 
-            // Perform transcription
-            const options = {};
+            // Prepare options for long audio processing
+            const options = {
+                // Process audio in 30-second chunks with 5-second overlaps
+                chunk_length_s: 30,
+                stride_length_s: 5,
+                // Return timestamps to see chunk processing
+                return_timestamps: false
+            };
+
             if (targetLanguage && targetLanguage !== 'auto') {
                 options.language = targetLanguage;
             }
 
-            // console.log('Starting transcription with options:', options);
+            console.log('Starting transcription with options:', options);
+            
+            // Send progress updates during long transcriptions
+            const audioDurationSeconds = audioFloat32.length / 16000;
+            const estimatedChunks = Math.ceil(audioDurationSeconds / (options.chunk_length_s - options.stride_length_s));
+            
+            self.postMessage({
+                type: 'progress',
+                text: `Processing ${audioDurationSeconds.toFixed(1)}s audio in ~${estimatedChunks} chunks...`,
+                percentage: 10
+            });
             
             const result = await model(audioFloat32, options);
             
-            // console.log('Transcription completed:', {
-            //     text: result.text,
-            //     model: currentModelName
-            // });
+            console.log('Transcription completed:', {
+                text: result.text,
+                model: currentModelName,
+                audioLength: audioFloat32.length,
+                audioDuration: `${audioDurationSeconds.toFixed(1)}s`
+            });
             
             self.postMessage({ type: 'result', text: result.text });
 
