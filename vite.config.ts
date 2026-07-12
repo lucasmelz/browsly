@@ -6,6 +6,7 @@ import { tanstackRouter } from "@tanstack/router-plugin/vite";
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/browsly/', // Configure base for GitHub Pages deployment
   plugins: [
     tanstackRouter({
       target: "react",
