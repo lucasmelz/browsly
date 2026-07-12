@@ -202,7 +202,7 @@ function RouteComponent() {
     setError("");
     setSummary("");
 
-    console.log(text);
+    // console.log(text);
 
     try {
       const summarizer = await window.Summarizer!.create();

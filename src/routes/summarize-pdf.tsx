@@ -61,7 +61,7 @@ function RouteComponent() {
       setError("");
       pdfToText(file)
         .then((text) => {
-          console.log(text);
+          // console.log(text);
           setExtractedText(text);
         })
         .catch(() => {
@@ -126,7 +126,7 @@ function RouteComponent() {
       currentIndex = endIndex;
     }
 
-    console.log(chunks);
+    // console.log(chunks);
 
     return chunks.filter(chunk => chunk.length > 0);
   }
@@ -245,7 +245,7 @@ function RouteComponent() {
     try {
       // Split text into chunks
       const chunks = splitTextIntoChunks(extractedText);
-      console.log(`Split text into ${chunks.length} chunks`);
+      // console.log(`Split text into ${chunks.length} chunks`);
       
       setProcessingProgress({ current: 0, total: chunks.length });
 
@@ -259,7 +259,7 @@ function RouteComponent() {
           m.addEventListener("downloadprogress", (e: any) => {
             const progress = Math.round(e.loaded * 100);
             setDownloadProgress(progress);
-            console.log(`Downloaded ${progress}%`);
+            // console.log(`Downloaded ${progress}%`);
           });
         },
       };

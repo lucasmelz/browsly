@@ -157,13 +157,13 @@ self.onmessage = async (e) => {
                 throw new Error('Audio data is empty');
             }
 
-            console.log('Audio data info:', {
-                type: audioFloat32.constructor.name,
-                length: audioFloat32.length,
-                durationSeconds: audioFloat32.length / 16000, // Assuming 16kHz sample rate
-                sample: audioFloat32.slice(0, 10),
-                model: currentModelName
-            });
+            // console.log('Audio data info:', {
+            //     type: audioFloat32.constructor.name,
+            //     length: audioFloat32.length,
+            //     durationSeconds: audioFloat32.length / 16000, // Assuming 16kHz sample rate
+            //     sample: audioFloat32.slice(0, 10),
+            //     model: currentModelName
+            // });
 
             // Prepare options for long audio processing
             const options = {
@@ -178,7 +178,7 @@ self.onmessage = async (e) => {
                 options.language = targetLanguage;
             }
 
-            console.log('Starting transcription with options:', options);
+            // console.log('Starting transcription with options:', options);
             
             // Send progress updates during long transcriptions
             const audioDurationSeconds = audioFloat32.length / 16000;
@@ -192,12 +192,12 @@ self.onmessage = async (e) => {
             
             const result = await model(audioFloat32, options);
             
-            console.log('Transcription completed:', {
-                text: result.text,
-                model: currentModelName,
-                audioLength: audioFloat32.length,
-                audioDuration: `${audioDurationSeconds.toFixed(1)}s`
-            });
+            // console.log('Transcription completed:', {
+            //     text: result.text,
+            //     model: currentModelName,
+            //     audioLength: audioFloat32.length,
+            //     audioDuration: `${audioDurationSeconds.toFixed(1)}s`
+            // });
             
             self.postMessage({ type: 'result', text: result.text });
 
