@@ -1,54 +1,65 @@
-# React + TypeScript + Vite
+# Browsly
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Browsly is a modern web application that leverages browser's native APIs and cutting-edge technologies like WebGPU to run AI models entirely locally in your browser. This enables completely private, offline, and secure execution of machine learning tasks without sending your personal data to any external server. 
 
-Currently, two official plugins are available:
+Available exclusively on desktop platforms (Windows, macOS, Linux).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## Expanding the ESLint configuration
+- **Language Translation**: Accurate real-time language translations offline.
+- **Media Transcription**: High-quality local transcription for audio and video files.
+- **Speech-to-Text**: Converts spoken words into text continuously in real-time.
+- **Text-to-Speech**: Transform text inputs into natural-sounding speech.
+- **PDF Summarization**: Automatically parse and generate summaries from large PDF documents without leaving your browser.
+- **Image Captioning & Subtitles Generation**: Describe images and automatically generate subtitles using in-browser AI.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠️ Technology Stack
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- **Framework**: [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/) + [Vite](https://vitejs.dev/)
+- **Routing**: [@tanstack/react-router](https://tanstack.com/router)
+- **State Management**: [@tanstack/react-query](https://tanstack.com/query)
+- **AI / ML Engine**: [@huggingface/transformers (Transformers.js)](https://huggingface.co/docs/transformers.js/index)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) + [Shadcn UI](https://ui.shadcn.com/) + [Radix UI](https://www.radix-ui.com/)
+- **PDF Processing**: `react-pdftotext`
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Ensure you have Node.js and a package manager (`yarn`, `npm`, or `pnpm`) installed. A WebGPU-compatible desktop browser (e.g., Chrome, Edge Beta/Dev on macOS/Windows) is highly recommended for hardware-accelerated model execution.
+
+### Installation
+
+1. Clone the repository and navigate into the project directory:
+   ```sh
+   git clone <repository_url>
+   cd browlsy
+   ```
+
+2. Install dependencies (e.g. using yarn):
+   ```sh
+   yarn
+   ```
+
+3. Start the development server:
+   ```sh
+   yarn dev
+   ```
+
+4. The application will typically run at `http://localhost:5173`.
+
+## 📦 Build for Production
+
+To build the application for production, run:
+```sh
+yarn build
 ```
+This will explicitly type-check the codebase (`tsc -b`) and bundle the optimized static site in the `dist/` directory using Vite.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🤝 Contributing
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Contributions, issues, and feature requests are always welcome! Feel free to raise an issue or submit a pull request if you want to contribute to the project.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## 📝 License
+
+This project is open-source.
